@@ -1136,8 +1136,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 
                 // Forgot password
                 if (_isLogin)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 16,
                     children: [
                       TextButton(
                         onPressed: () {
@@ -1150,7 +1151,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: Text('Forgot Password?'),
                       ),
-                      SizedBox(width: 24),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
