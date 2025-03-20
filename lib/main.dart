@@ -866,181 +866,140 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: Text(_isLogin ? 'Login' : 'Register'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Email field
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
-                keyboardType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 16),
-              
-              // Password field
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.blue,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
-                    },
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Email field
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.emailAddress,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  if (!_isLogin && value.length < 6) {
-                    return 'Password must be at least 6 characters';
-                  }
-                  return null;
-                },
-                obscureText: !_passwordVisible,
-              ),
-              SizedBox(height: 24),
-              
-              // Error message
-              if (authProvider.error != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Text(
-                    authProvider.error!,
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-              
-              // Login/Register button
-              ElevatedButton(
-                onPressed: authProvider.isLoading
-                    ? null
-                    : () async {
-                        if (_formKey.currentState!.validate()) {
-                          bool success = _isLogin
-                              ? await authProvider.signInWithEmailAndPassword(
-                                  _emailController.text,
-                                  _passwordController.text,
-                                )
-                              : await authProvider.registerWithEmailAndPassword(
-                                  _emailController.text,
-                                  _passwordController.text,
-                                );
-                          
-                          if (!success && mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(authProvider.error ?? 'An error occurred')),
-                            );
-                          }
-                        }
-                      },
-                child: authProvider.isLoading
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.0,
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Text(_isLogin ? 'Signing in...' : 'Creating account...'),
-                        ],
-                      )
-                    : Text(_isLogin ? 'Login' : 'Register'),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
-                ),
-              ),
-              SizedBox(height: 16),
-              
-              // Social Login Buttons
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  'OR CONTINUE WITH',
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              
-              // Google Sign In button
-              OutlinedButton(
-                onPressed: authProvider.isLoading
-                    ? null
-                    : () async {
-                        bool success = await authProvider.signInWithGoogle();
-                        if (!success && mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(authProvider.error ?? 'An error occurred')),
-                          );
-                        }
-                      },
-                child: authProvider.isLoading 
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.0,
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Text('Connecting...'),
-                        ],
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/google_logo.png', height: 24),
-                          SizedBox(width: 12),
-                          Text('Sign in with Google'),
-                        ],
+                SizedBox(height: 16),
+                
+                // Password field
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                        color: Colors.blue,
                       ),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
+                      onPressed: () {
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    if (!_isLogin && value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
+                  obscureText: !_passwordVisible,
                 ),
-              ),
-              SizedBox(height: 12),
-              
-              // Apple Sign In button
-              if (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
+                SizedBox(height: 24),
+                
+                // Error message
+                if (authProvider.error != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Text(
+                      authProvider.error!,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                
+                // Login/Register button
+                ElevatedButton(
+                  onPressed: authProvider.isLoading
+                      ? null
+                      : () async {
+                          if (_formKey.currentState!.validate()) {
+                            bool success = _isLogin
+                                ? await authProvider.signInWithEmailAndPassword(
+                                    _emailController.text,
+                                    _passwordController.text,
+                                  )
+                                : await authProvider.registerWithEmailAndPassword(
+                                    _emailController.text,
+                                    _passwordController.text,
+                                  );
+                            
+                            if (!success && mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(authProvider.error ?? 'An error occurred')),
+                              );
+                            }
+                          }
+                        },
+                  child: authProvider.isLoading
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.0,
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Text(_isLogin ? 'Signing in...' : 'Creating account...'),
+                          ],
+                        )
+                      : Text(_isLogin ? 'Login' : 'Register'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50),
+                  ),
+                ),
+                SizedBox(height: 16),
+                
+                // Social Login Buttons
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    'OR CONTINUE WITH',
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                
+                // Google Sign In button
                 OutlinedButton(
                   onPressed: authProvider.isLoading
                       ? null
                       : () async {
-                          bool success = await authProvider.signInWithApple();
+                          bool success = await authProvider.signInWithGoogle();
                           if (!success && mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(authProvider.error ?? 'An error occurred')),
@@ -1065,112 +1024,155 @@ class _LoginScreenState extends State<LoginScreen> {
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.apple, size: 28),
+                            Image.asset('assets/google_logo.png', height: 24),
                             SizedBox(width: 12),
-                            Text('Sign in with Apple'),
+                            Text('Sign in with Google'),
                           ],
                         ),
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50),
-                    backgroundColor: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 12),
+                
+                // Apple Sign In button
+                if (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
+                  OutlinedButton(
+                    onPressed: authProvider.isLoading
+                        ? null
+                        : () async {
+                            bool success = await authProvider.signInWithApple();
+                            if (!success && mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(authProvider.error ?? 'An error occurred')),
+                              );
+                            }
+                          },
+                    child: authProvider.isLoading 
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.0,
+                                ),
+                              ),
+                              SizedBox(width: 12),
+                              Text('Connecting...'),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.apple, size: 28),
+                              SizedBox(width: 12),
+                              Text('Sign in with Apple'),
+                            ],
+                          ),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50),
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                
+                // Facebook Sign In button
+                SizedBox(height: 12),
+                OutlinedButton(
+                  onPressed: authProvider.isLoading
+                      ? null
+                      : () async {
+                          bool success = await authProvider.signInWithFacebook();
+                          if (!success && mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(authProvider.error ?? 'An error occurred')),
+                            );
+                          }
+                        },
+                  child: authProvider.isLoading 
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.0,
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Text('Connecting...'),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FaIcon(FontAwesomeIcons.facebook, size: 24, color: Colors.white),
+                            SizedBox(width: 12),
+                            Text('Sign in with Facebook', style: TextStyle(color: Colors.white)),
+                          ],
+                        ),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50),
+                    backgroundColor: Color(0xFF1877F2), // Facebook blue
                     foregroundColor: Colors.white,
                   ),
                 ),
-              
-              // Facebook Sign In button
-              SizedBox(height: 12),
-              OutlinedButton(
-                onPressed: authProvider.isLoading
-                    ? null
-                    : () async {
-                        bool success = await authProvider.signInWithFacebook();
-                        if (!success && mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(authProvider.error ?? 'An error occurred')),
-                          );
-                        }
-                      },
-                child: authProvider.isLoading 
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.0,
+                SizedBox(height: 16),
+                
+                // Toggle between login and register
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _isLogin = !_isLogin;
+                    });
+                  },
+                  child: Text(_isLogin
+                      ? 'Don\'t have an account? Register'
+                      : 'Already have an account? Login'),
+                ),
+                
+                // Forgot password
+                if (_isLogin)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPasswordScreen(),
                             ),
-                          ),
-                          SizedBox(width: 12),
-                          Text('Connecting...'),
-                        ],
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FaIcon(FontAwesomeIcons.facebook, size: 24, color: Colors.white),
-                          SizedBox(width: 12),
-                          Text('Sign in with Facebook', style: TextStyle(color: Colors.white)),
-                        ],
+                          );
+                        },
+                        child: Text('Forgot Password?'),
                       ),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
-                  backgroundColor: Color(0xFF1877F2), // Facebook blue
-                  foregroundColor: Colors.white,
-                ),
-              ),
-              SizedBox(height: 16),
-              
-              // Toggle between login and register
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _isLogin = !_isLogin;
-                  });
-                },
-                child: Text(_isLogin
-                    ? 'Don\'t have an account? Register'
-                    : 'Already have an account? Login'),
-              ),
-              
-              // Forgot password
-              if (_isLogin)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ForgotPasswordScreen(),
-                          ),
-                        );
-                      },
-                      child: Text('Forgot Password?'),
-                    ),
-                    SizedBox(width: 24),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PasskeySignInScreen(),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.fingerprint, size: 18),
-                          SizedBox(width: 4),
-                          Text('Sign in with Passkey'),
-                        ],
+                      SizedBox(width: 24),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PasskeySignInScreen(),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.fingerprint, size: 18),
+                            SizedBox(width: 4),
+                            Text('Sign in with Passkey'),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-            ],
+                    ],
+                  ),
+              ],
+            ),
           ),
         ),
       ),
