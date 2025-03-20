@@ -856,6 +856,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLogin = true;
+  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -898,6 +899,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.blue,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -908,7 +920,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                   return null;
                 },
-                obscureText: true,
+                obscureText: !_passwordVisible,
               ),
               SizedBox(height: 24),
               

@@ -23,6 +23,14 @@ A Flutter project demonstrating Firebase Authentication with email/password and 
    - For Android: `google-services.json` (place in `android/app/`)
    - For iOS: `GoogleService-Info.plist` (place in `ios/Runner/`)
 
+#### Security Note:
+The Firebase configuration files contain API keys and should not be committed to version control.
+This repository includes template files:
+- `android/app/google-services.json.template`
+- `ios/Runner/GoogleService-Info.plist.template`
+
+Copy these template files, rename them to remove the `.template` extension, and add your actual Firebase credentials.
+
 ### 2. Google Sign-In Setup
 
 1. Configure OAuth consent screen in Google Cloud Console
@@ -66,3 +74,18 @@ flutter test
 - [Google Sign-In for Flutter](https://pub.dev/packages/google_sign_in)
 - [Flutter Provider Package](https://pub.dev/packages/provider)
 - [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage)
+
+## Security Best Practices
+
+### Handling API Keys
+1. Keep your `google-services.json` and `GoogleService-Info.plist` files out of version control (they're listed in .gitignore)
+2. For CI/CD or team development, consider:
+   - Using environment variables to inject keys during build time
+   - Setting up secure credential storage in your CI system
+   - Using Firebase App Distribution for testing
+
+### Secure Data Storage
+This app uses `flutter_secure_storage` for storing sensitive user data like tokens. Never store sensitive information using regular SharedPreferences or other non-encrypted storage methods.
+
+### Additional Resource
+- [Flutter Security Best Practices](https://docs.flutter.dev/security)
